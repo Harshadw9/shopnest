@@ -1,0 +1,34 @@
+CREATE DATABASE HOTEL; 
+ 
+USE HOTEL; 
+ 
+CREATE TABLE Item ( item_code INT PRIMARY KEY, item_name VARCHAR(100) NOT NULL, qty_in_stock INT, reorder_level INT ); 
+
+CREATE TABLE Supplier ( supplier_code INT PRIMARY KEY, supplier_name VARCHAR(100) NOT NULL, address VARCHAR(255) ); 
+
+CREATE TABLE Can_supply ( supplier_code INT, item_code INT, PRIMARY KEY (supplier_code, item_code), FOREIGN KEY (supplier_code) REFERENCES Supplier(supplier_code), FOREIGN KEY (item_code) REFERENCES Item(item_code) ); 
+
+INSERT INTO Item (item_code, item_name, qty_in_stock, reorder_level) VALUES(1, 'Widget A', 50, 20),(2, 'Widget B', 30, 15),(3, 'Gadget C', 10, 25),(4, 'Gadget D', 5, 10),(5, 'Thingamajig E', 100, 50); 
+
+
+INSERT INTO Supplier (supplier_code, supplier_name, address) VALUES
+(101, 'Supplier One', '123 Main St, Springfield'),
+(102, 'Supplier Two', '456 Elm St, Springfield'),
+(103, 'Supplier Three', '789 Oak St, Springfield'),
+(104, 'Supplier Four', '321 Pine St, Springfield'),
+(105, 'Supplier Five', '654 Cedar St, Springfield'); 
+
+INSERT INTO Can_supply (supplier_code, item_code) VALUES(101, 1),(101, 2),(102, 1),(103, 3),(104, 4),(105, 5),(105, 2); 
+
+
+SELECT *FROM Item; 
+
+SELECT *FROM Supplier; 
+ 
+SELECT s.supplier_name, i.item_name FROM Supplier s JOIN Can_supply cs ON s.supplier_code = cs.supplier_code JOIN Item i ON cs.item_code = i.item_code; 
+
+SELECT *FROM Item WHERE qty_in_stock < reorder_level; 
+
+SELECT s.supplier_name FROM Supplier s JOIN Can_supply cs ON s.supplier_code = cs.supplier_code WHERE cs.item_code = 2; 
+
+SELECT i.item_name FROM Item i WHERE i.item_code NOT IN ( SELECT cs.item_code FROM Can_supply cs WHERE cs.supplier_code = 101 ); 

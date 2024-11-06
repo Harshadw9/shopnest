@@ -1,0 +1,19 @@
+CREATE DATABASE STU;
+
+USE STU;
+
+CREATE TABLE Student ( roll_no INT PRIMARY KEY, marks INT, category VARCHAR(50), district VARCHAR(100), state VARCHAR(100) );
+
+CREATE TABLE Student_rank ( roll_no INT PRIMARY KEY, marks INT, student_rank INT, FOREIGN KEY (roll_no) REFERENCES Student(roll_no) );
+
+INSERT INTO Student (roll_no, marks, category, district, state) VALUES(1, 85, 'General', 'Chennai', 'Tamil Nadu'),(2, 78, 'OBC', 'Hyderabad', 'Telangana'),(3, 90, 'SC', 'Visakhapatnam', 'Andhra Pradesh'),(4, 65, 'General', 'Coimbatore', 'Tamil Nadu'),(5, 72, 'OBC', 'Amaravati', 'Andhra Pradesh');
+
+SELECT *FROM Student; 
+
+SELECT *FROM Student_rank;
+
+SELECT s.roll_no, s.marks, s.category, s.district, s.state, r.student_rank FROM Student s JOIN Student_rank r ON s.roll_no = r.roll_no;
+
+SELECT s.roll_no, s.marks, s.category, s.district, s.state, r.student_rank FROM Student s JOIN Student_rank r ON s.roll_no = r.roll_no WHERE s.state = 'Tamil Nadu' AND r.student_rank > 100;
+
+SELECT s.roll_no, s.marks, s.category, s.district, s.state, r.student_rank FROM Student s JOIN Student_rank r ON s.roll_no = r.roll_no WHERE s.state = 'Andhra Pradesh' AND s.category = 'OBC' AND r.student_rank > 100;

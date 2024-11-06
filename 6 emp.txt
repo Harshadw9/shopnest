@@ -1,0 +1,30 @@
+CREATE DATABASE Employee;
+
+USE Employee
+
+CREATE TABLE EmployeeInfo ( EmpID INT PRIMARY KEY, EmpFname VARCHAR(50) NOT NULL, EmpLname VARCHAR(50) NOT NULL, Department VARCHAR(50), Project VARCHAR(50), Address VARCHAR(255), DOB DATE, Gender VARCHAR(10) ); 
+
+CREATE TABLE EmployeePosition ( EmpID INT, EmpPosition VARCHAR(50), DateOfJoining DATE, Salary DECIMAL(10, 2), PRIMARY KEY (EmpID, EmpPosition), FOREIGN KEY (EmpID) REFERENCES EmployeeInfo(EmpID) );
+
+INSERT INTO EmployeeInfo (EmpID, EmpFname, EmpLname, Department, Project, Address, DOB, Gender) VALUES
+(1, 'Alice', 'Smith', 'HR', 'Recruitment', '123 Main St, Springfield', '1990-05-15', 'Female'),
+(2,'Bob', 'Johnson', 'IT', 'Web Development', '456 Oak St, Springfield', '1985-03-22', 'Male'),
+(3, 'Charlie', 'Brown', 'Finance', 'Accounting', '789 Pine St, Springfield', '1992-07-30', 'Male'),
+(4, 'David', 'Wilson', 'Marketing', 'Advertising', '321 Maple St, Springfield', '1988-12-05', 'Male'),
+(5, 'Eva', 'Green', 'IT', 'Mobile Development', '654 Cedar St, Springfield', '1995-09-18', 'Female');
+
+INSERT INTO EmployeePosition (EmpID, EmpPosition, DateOfJoining, Salary) VALUES(1, 'HR Manager', '2020-01-10', 60000.00),
+(2, 'Software Engineer', '2019-02-15', 75000.00),
+(3, 'Accountant', '201803-20', 55000.00),
+(4, 'Marketing Specialist', '2021-04-25', 50000.00),
+(5, 'Mobile Developer', '2022-05-30', 70000.00);
+
+SELECT UPPER (EmpFname) AS EmpName FROM EmployeeInfo; 
+
+SELECT COUNT(*) AS NumberOfEmployees FROM EmployeeInfo WHERE Department = 'HR';
+
+SELECT e.EmpFname, e.EmpLname, p.Salary FROM EmployeeInfo e JOIN EmployeePosition p ON e.EmpID = p.EmpID WHERE p.Salary BETWEEN 50000 AND 100000; 
+
+SELECT EmpFname, EmpLname FROM EmployeeInfo WHERE EmpFname LIKE 'S%';
+
+SELECT *FROM EmployeeInfo ORDER BY EmpID LIMIT 3;

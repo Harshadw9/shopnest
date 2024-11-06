@@ -1,0 +1,147 @@
+show dbs
+
+db.createCollection("Book")
+
+use Book
+
+db.Book.insert({Book_isbn:1001,Title:"DBMS",P_name:"Technical",Author:{Name:"ABC",Address:"Pune",Phone_no:[{Landline:1234567989,Mobile:365897413}]},P_city:"Baramati",Price:250,Copies:150}) 
+
+db.Book.find({P_city:"Pune"}) 
+db.Book.find({Title:/^D/}) 
+db.Book.remove({Title:/^D/}) 
+db.Book.update({P_city:'A.Nagar'},{$set:{P_City:'New York'}}) 
+db.Book.find({P_name:'Data Analytics'})
+
+-------------------------------------------------
+
+db.Book.countDocuments() 
+db.Book.find({}).sort({ book_isbn: -1 })
+db.Book.find({Title:"Python for Data Analytics"}) 
+db.Book.update({P_name:"OracleCorporation"},{$set:{Copies:120}})
+db.Book.aggregate([{$group:{_id:"$P_name", totalBooks:{$sum:1}}},{$sort:{totalBooks:1}}]) 
+
+-------------------------------------------------
+
+db.Orders.countDocuments() 
+db.Orders.aggregate([{ $group:{ _id: null, totalPrice: {$sum:"$Price"}}}])
+db.Orders.aggregate([{$group:{ _id:"$cust_id", totalPrice: { $sum: "$Price"}}}]) 
+db.Orders.aggregate([{$group:{ _id:"$cust_id", totalPrice: { $sum: "$Price"}}}, {$sort:{TotalPrice: -1}}]) 
+------------------------------------------------
+
+db.Rating.insert({ Movie_id:123, User_id:12, Title:"Avatar(2009)", Status:'A'})
+db.Rating.createIndex({ Movie_id: 1 })
+db.Rating.getIndexes() 
+db.Rating.find({}).sort({ Movie_id: -1 }) 
+db.Rating.createIndex({ Movie_id: -1 }) 
+db.Rating.find({}).limit(5); 
+
+------------------------------------------------
+
+db.Orders.mapReduce(function () {emit (this.gender, 1);}, function (key, values) {return Array.sum(values);},{out:'gender_count'});
+~db.orders.aggregate([ { $group: { _id: "$gender", } } ]);
+db.Orders.mapReduce(function () {emit (this.rating, 1);}, function (key, values) {return Array.sum(values);},{out:'rating_count'});
+~db.orders.aggregate([ { $group: { _id: "$rating", count: { $sum: 1 } } } ]); 
+
+------------------------------------------------
+
+db.Rating.find({ Title: "Star Wars(1983)" }).sort({ Movie_id: -1 });
+db.Rating.reIndex(); 
+db.Rating.dropIndex("Movie_id_1"); 
+db.Rating.dropIndex("Movie_id_1"); 
+~db.Rating.getIndexes(); 
+db.Rating.createIndex({ Movie_id: -1 }) 
+~db.Rating.find({ Title: "Avatar(2009)" }) 
+
+------------------------------------------------
+
+db.Book.find({ Title: "JAVA" }); 
+db.Book.update({P_name:"OracleCorporation"},{$set:{Copies:120}})
+db.Book.aggregate([{$group:{_id:"$P_name", totalBooks:{$sum:1}}},{$sort:{totalBooks:1}}])
+db.Book.distinct("P_name", { "Author.Name": { $regex: "^W" } })
+db.Book.deleteOne({ "Author.Name": "XYZ" }) 
+
+------------------------------------------------
+
+Book> db.Teachers.insertMany([ 
+   
+{ Tname: "John Doe", 
+dno: 2, 
+experience: 12, 
+salary: 12000, 
+date_of_joining: new Date("2010-01-15")
+}, 
+ 
+{ 
+Tname: "Jane Smith", 
+dno: 1, 
+experience: 8, 
+salary: 9500, 
+date_of_joining: new Date("2015-03-10") 
+}, 
+{ 
+Tname: "Mike Johnson", 
+dno: 2, 
+experience: 15, 
+salary: 15000, 
+date_of_joining: new Date("2008-06-25") 
+} 
+]); 
+
+Book> db.Students.insertMany([ 
+{ 
+Sname: "Anil", 
+roll_no: 1, 
+class: "TE" 
+}, 
+{ 
+Sname: "Ravi", 
+roll_no: 2, 
+class: "SE" 
+}, 
+{ 
+Sname: "Priya", 
+roll_no: 3, 
+class: "TE" 
+}, 
+{ 
+Sname: "Sita", 
+roll_no: 4, 
+class: "BE" 
+} 
+]);
+
+db.Teachers.find({ dno: 2, salary: { $gte: 10000 } });
+db.Students.find({ $or: [ { roll_no: 2 }, { Sname: "Anil" } ] }); 
+db.Students.countDocuments({ class: "TE" });
+db.Teachers.updateMany( { experience: { $gt: 10 } }, { $mul: { salary: 1.05 } }  ); 
+
+---------------------------------------------------
+
+db.createCollection("restaurant"); 
+
+test> db.restaurant.insertOne({ 
+"address": { 
+"building": "1007", 
+"coord": [-73.856077, 40.848447], 
+"street": "Morris Park Ave", 
+"zipcode": "10462" 
+}, 
+"borough": "Bronx", 
+"cuisine": "Bakery", 
+"grades": [ 
+{ "date": new Date(1393804800000), "grade": "A", "score": 2 }, 
+{ "date": new Date(1378857600000), "grade": "A", "score": 6 }, 
+{ "date": new Date(1358985600000), "grade": "A", "score": 10 }, 
+{ "date": new Date(1322006400000), "grade": "A", "score": 9 }, 
+{ "date": new Date(1299715200000), "grade": "B", "score": 14 } 
+], 
+"name": "Morris Park Bake Shop", 
+"restaurant_id": "30075445" 
+}); 
+
+
+db.restaurant.find( {}, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 } );
+db.restaurant.find( {}, { restaurant_id: 1, name: 1, borough: 1, cuisine: 1 } ); 
+db.restaurant.find( {}, { restaurant_id: 1, name: 1, borough: 1, "address.zipcode": 1, _id: 0 } ); 
+
+--------------------------------------------------------

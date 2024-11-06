@@ -1,0 +1,40 @@
+create database Library; 
+
+use Library;
+
+CREATE TABLE BOOK (Book_ISBN VARCHAR(20) PRIMARY KEY,
+Title VARCHAR(255) NOT NULL,
+Publisher_Name VARCHAR(255),
+Price DECIMAL(10, 2) CHECK (Price > 0),
+Date_Of_Publication DATE,
+Book_Copy INT); 
+
+CREATE TABLE BOOK_AUTHORS (Book_ISBN VARCHAR(20),
+Author_Name VARCHAR(255),
+Author_City VARCHAR(255),
+PRIMARY KEY (Book_ISBN, Author_Name),
+FOREIGN KEY (Book_ISBN) REFERENCES BOOK(Book_ISBN));
+
+INSERT INTO BOOK VALUES('978-3-16-148410-0', 'Book Title 1', 'Publisher A', 100, '2021-01-15', 12), 
+('978-1-23-456789-7', 'Book Title 2', 'Korth', 150, '2020-03-22', 10),
+('978-0-12-345678-9', 'Book Title 3', 'Publisher C', 150, '2022-06-30', 20),
+('978-3-16-148410-1', 'Book Title 4', 'Publisher A', 220, '2019-07-18', 8),  
+('978-1-23-456789-8', 'Book Title 5', 'Publisher B', 250, '2014-09-10', 5), 
+('978-0-12-345678-0', 'Book Title 6', 'Publisher C', 185, '2013-05-20', 14);
+
+INSERT INTO BOOK_AUTHORS VALUES ('978-3-16-148410-0', 'Author A', 'Pune'), 
+('978-1-23-456789-7', 'Korth', 'Nashik'), 
+('978-0-12-345678-9', 'Author C', 'Mumbai'), 
+('978-3-16-148410-1', 'Author D', 'Pune'), 
+('978-1-23-456789-8', 'Author E', 'Bhiwandi'), 
+('978-0-12-345678-0', 'Author F', 'Shirdi');
+
+SELECT b.Book_ISBN, b.Title, a.Author_Name FROM BOOK b INNER JOIN BOOK_AUTHORS a ON b.Book_ISBN = a.Book_ISBN;
+
+SELECT b.Book_ISBN, b.Title, b.Publisher_Name, a.Author_Name FROM BOOK b LEFT OUTER JOIN BOOK_AUTHORS a ON b.Book_ISBN = a.Book_ISBN;
+
+SELECT b.Book_ISBN, b.Title, b.Publisher_Name, a.Author_Name FROM BOOK b RIGHT OUTER JOIN BOOK_AUTHORS a ON b.Book_ISBN = a.Book_ISBN;
+
+SELECT b.Book_ISBN, b.Title FROM BOOK b JOIN BOOK_AUTHORS a ON b.Book_ISBN = a.Book_ISBN WHERE a.Author_City = 'Pune'; 
+
+SELECT b.Book_ISBN, b.Title FROM BOOK b JOIN BOOK_AUTHORS a ON b.Book_ISBN = a.Book_ISBN GROUP BY b.Book_ISBN, b.Title HAVING COUNT(a.Author_Name) > 2;

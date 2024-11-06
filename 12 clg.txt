@@ -1,0 +1,32 @@
+CREATE DATABASE COLLEGE; 
+
+USE COLLEGE; 
+
+CREATE TABLE College_info ( college_code INT PRIMARY KEY, college_name VARCHAR(100) NOT NULL, address VARCHAR(255) ); 
+
+CREATE TABLE Faculty_info ( college_code INT, faculty_code INT PRIMARY KEY, faculty_name VARCHAR(100) NOT NULL, qualification VARCHAR(50), experience_in_no_of_years INT, address VARCHAR(255), FOREIGN KEY (college_code) REFERENCES College_info(college_code) );
+
+ INSERT INTO College_info (college_code, college_name, address) VALUES
+(1, 'Springfield College', '123 College Ave, Springfield'),
+(2, 'Riverdale University', '456 River Rd, Riverdale'),
+(3, 'Hilltop Institute', '789 Hill St, Hilltown'),
+(4, 'Lakeside Academy', '321 Lakeview Dr, Lakeside'),
+(5, 'Mountainview College', '654 Mountain Rd, Mountainview'); 
+
+INSERT INTO Faculty_info (college_code, faculty_code, faculty_name, qualification, experience_in_no_of_years, address) VALUES
+(1, 101, 'Alice Smith', 'B.Tech', 5, '101 Faculty St, Springfield'),
+(1, 102, 'Bob Johnson', 'M.Tech', 3, '102 Faculty St, Springfield'),
+(2, 201, 'Charlie Brown', 'MBA', 8, '201 Faculty St, Riverdale'),
+(3, 301, 'David Wilson', 'PhD in Physics', 10, '301 Faculty St, Hilltown'),
+(4, 401, 'Eva Green', 'M.Tech', 4, '401 Faculty St, Lakeside');
+
+SELECT * FROM Faculty_info; 
+
+SELECT * FROM College_info;
+
+SELECT f.faculty_name, c.college_name FROM Faculty_info f JOIN College_info c ON f.college_code = c.college_code; 
+
+SELECT faculty_name FROM Faculty_info WHERE experience_in_no_of_years >= 10 AND qualification = 'M. Tech';
+
+SELECT faculty_name FROM Faculty_info WHERE experience_in_no_of_years >= 10 AND qualification <> 'M. Tech'; 
+

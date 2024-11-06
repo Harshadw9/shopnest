@@ -1,0 +1,32 @@
+CREATE DATABASE STUDENTS; 
+
+USE STUDENTS; 
+
+CREATE TABLE Student ( roll_no INT PRIMARY KEY, name VARCHAR(100) NOT NULL, subject_name VARCHAR(100), subject_opted VARCHAR(100) ); 
+ 
+CREATE TABLE Subject ( faculty_code INT PRIMARY KEY, faculty_name VARCHAR(100) NOT NULL, specialization VARCHAR(100) ); 
+
+INSERT INTO Student (roll_no, name, subject_name, subject_opted) VALUES
+(1101, 'Alice Smith', 'DBMS', 'Yes'),
+(1102, 'Bob Johnson', 'Algorithms', 'Yes'),
+(1103, 'Charlie Brown', 'DBMS', 'Yes'),
+(1104, 'David Wilson', 'Operating Systems', 'No'),
+(1105, 'Eva Green', 'Networking', 'Yes'); 
+
+
+INSERT INTO Subject (faculty_code, faculty_name, specialization) VALUES
+(101, 'Prof. Alan Turing', 'Computer Science'),
+(102, 'Dr. Ada Lovelace', 'Mathematics'),
+(103, 'Dr. Grace Hopper', 'Software Engineering'),
+(104, 'Mr. John von Neumann', 'Theoretical Computer Science'),
+(105, 'Ms. Barbara Liskov', 'Distributed Systems'); 
+ 
+SELECT *FROM Student; 
+
+SELECT *FROM Subject; 
+
+SELECT COUNT(*) AS NumberOfStudents FROM Student WHERE subject_name = 'DBMS'; 
+
+SELECT faculty_name FROM Subject WHERE faculty_code NOT IN (SELECT DISTINCT faculty_code FROM Student); 
+
+SELECT subject_name FROM Student WHERE roll_no = 1101;
