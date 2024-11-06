@@ -1,0 +1,29 @@
+CREATE DATABASE INSURANCE;
+
+USE INSURANCE; 
+
+CREATE TABLE person ( driver_id INT PRIMARY KEY, name VARCHAR(255) NOT NULL, address VARCHAR(255) );
+
+CREATE TABLE car ( license VARCHAR(20) PRIMARY KEY, model VARCHAR(100) NOT NULL, year INT CHECK (year > 1885));
+
+CREATE TABLE accident ( report_no INT PRIMARY KEY, date DATE NOT NULL, location VARCHAR(255) ); 
+
+CREATE TABLE owns ( driver_id INT, license VARCHAR(20), PRIMARY KEY (driver_id, license), FOREIGN KEY (driver_id) REFERENCES person(driver_id), FOREIGN KEY (license) REFERENCES car(license) ); 
+
+CREATE TABLE participated ( driver_id INT, car VARCHAR(20), report_no INT, damage_amount DECIMAL(10, 2), PRIMARY KEY (driver_id, car, report_no), FOREIGN KEY (driver_id) REFERENCES person(driver_id), FOREIGN KEY (car) REFERENCES car(license), FOREIGN KEY (report_no) REFERENCES accident(report_no) );
+
+INSERT INTO person (driver_id, name, address) VALUES(1, 'Alice Smith', '123 Elm St, Springfield'),(2, 'Bob Johnson', '456 Oak St, Springfield'),(3, 'Charlie Brown', '789 Pine St, Springfield'),(4, 'David Wilson', '321 Maple St, Springfield'),(5, 'Eva Green', '654 Cedar St, Springfield'); 
+
+INSERT INTO car (license, model, year) VALUES('ABC123', 'Toyota Camry', 2020),('XYZ456', 'Honda Accord',2019),('LMN789', 'Ford Focus', 2018),('JKL012', 'Chevrolet Malibu', 2021),('QRS345', 'Nissan Altima', 2022);
+
+INSERT INTO accident (report_no, date, location) VALUES(1, '2023-01-15', '1st Ave & Main St'),(2, '2023-02-20', '2nd Ave & Oak St'),(3, '2023-03-05', '3rd Ave & Pine St'),(4, '2016-04-10', '4th Ave & Maple St'),(5, '2016-05-12', '5th Ave & Cedar St');
+
+INSERT INTO owns (driver_id, license) VALUES(1, 'ABC123'),(2, 'XYZ456'),(3, 'LMN789'),(4, 'JKL012'),(5, 'QRS345'); 
+
+INSERT INTO participated (driver_id, car, report_no, damage_amount) VALUES(1, 'ABC123', 1, 1500.00),(2, 'XYZ456', 2, 2300.50),(3, 'LMN789', 3, 1200.75),(4, 'JKL012', 4, 3000.00),(5, 'QRS345', 5, 1750.25);
+
+SELECT COUNT(DISTINCT o.driver_id) AS TotalPeople FROM owns o JOIN participated p ON o.driver_id = p.driver_id JOIN accident a ON p.report_no = a.report_no WHERE YEAR(a.date) = 2016;
+
+SELECT name FROM person WHERE address LIKE '%Pune%';
+
+SELECT p.name FROM person p JOIN owns o ON p.driver_id = o.driver_id GROUP BY p.driver_id, p.name HAVING COUNT(o.license) > 2; 
